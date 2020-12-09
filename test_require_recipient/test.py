@@ -12,8 +12,8 @@ async def test():
     wallet.import_key('test', '5Jbb4wuwz8MAzTB9FJNmrVYGXo4ABb7wqPVoWGcZ6x8V2FwNeDo')
     uuosapi = chainapi.ChainApiAsync('http://127.0.0.1:8888')
 
-    code1 = uuosapi.compile('hello', src1)
-    code2 = uuosapi.compile('hello', src2)
+    code1 = await uuosapi.compile('hello', src1)
+    code2 = await uuosapi.compile('hello', src2)
 
     try:
         r = await uuosapi.deploy_contract('hello', code1, abi, vm_type=1)
