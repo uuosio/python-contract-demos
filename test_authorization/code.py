@@ -9,5 +9,5 @@ def apply(receiver, first_receiver, action):
     elif action == name('test2'):
         print('hello')
         # not good, transaction does not have owner authorization,
-        # will throw an exception, should be catched by test code
+        # will throw an exception, should be caught by test code
         chain.require_auth2('hello', 'owner')
