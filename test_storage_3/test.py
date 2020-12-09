@@ -3,7 +3,7 @@ example show how to store/load a 256 bit primary key data
 '''
 from uuoskit import chainapi, wallet
 
-import test_helper
+from uuoskit import test_helper
 src, abi = test_helper.load_code()
 
 async def test():

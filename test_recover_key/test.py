@@ -3,7 +3,7 @@ example for recover_key and assert_recover_key
 '''
 from uuoskit import chainapi, wallet
 
-import test_helper
+from uuoskit import test_helper
 src, abi = test_helper.load_code()
 
 async def test():

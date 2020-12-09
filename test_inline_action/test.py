@@ -1,6 +1,6 @@
 from uuoskit import chainapi, wallet, config
 
-import test_helper
+from uuoskit import test_helper
 src, abi = test_helper.load_code()
 
 async def update_code_auth(uuosapi):
