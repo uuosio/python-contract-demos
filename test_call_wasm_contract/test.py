@@ -2,10 +2,7 @@
 example for call wasm contract:
 '''
 
-from browser import aio
 from uuoskit import chainapi, wallet
-import ujson as json
-
 
 wasm_abi = {
     "version": "eosio::abi/1.0",
@@ -56,23 +53,23 @@ async def test():
     wallet.import_key('test', '5JRYimgLBrRLCBAcjHUWCYRv3asNedTYYzVgmiU4q2ZVxMBiJXL')
     # import active key for helloworld11
     wallet.import_key('test', '5Jbb4wuwz8MAzTB9FJNmrVYGXo4ABb7wqPVoWGcZ6x8V2FwNeDo')
-    uuosapi = chainapi.ChainApi('http://127.0.0.1:8888')
-    code = uuosapi.compile('hello', src)
+    uuosapi = chainapi.ChainApiAsync('http://127.0.0.1:8888')
+    code = await uuosapi.compile('hello', src, vm_type=1)
 
     try:
-        r = await uuosapi.deploy_contract('helloworld11', wasm_code, wasm_abi, vmtype=0)
+        r = await uuosapi.deploy_contract('helloworld11', wasm_code, wasm_abi, vm_type=0)
     except chainapi.ChainException as e:
         print('+++deploy error:', e.error.message)
 
     try:
-        r = await uuosapi.deploy_contract('hello', code, abi, vmtype=1)
+        r = await uuosapi.deploy_contract('hello', code, abi, vm_type=1)
     except chainapi.ChainException as e:
         print('+++deploy error:', e.error.message)
 
     args = 'hello,world'
     try:
         r = await uuosapi.push_action('hello', 'sayhello', args, {'hello': 'active'})
-        print(r.processed.action_traces[0].console)
+        print(r['processed']['action_traces'][0]['console'])
     except chainapi.ChainException as e:
         print(e)
 
@@ -82,5 +79,5 @@ async def run_test():
     except Exception as e:
         print(e)
 
-aio.run(run_test())
+test_helper.run(run_test())
 

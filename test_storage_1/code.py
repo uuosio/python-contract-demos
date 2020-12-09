@@ -45,4 +45,3 @@ def apply(receiver, first_receiver, action):
     primary_key = 2
     data = storage.load(primary_key)
     print(data)
-    
