@@ -20,7 +20,7 @@ async def test():
     except chainapi.ChainException as e:
         print('+++deploy error:', e.error.message)
 
-    args = b'hello,world'.hex()
+    args = 'hello,world'
     try:
         r = await uuosapi.push_action('hello', 'sayhello', args, {'hello': 'active'})
         print(r['processed']['action_traces'][0]['console'])
