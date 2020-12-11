@@ -26,6 +26,7 @@ async def test():
         print(r['processed']['action_traces'][0]['console'])
     except chainapi.ChainException as e:
         print(e)
+        print(e.error['json']['error']['details'][1]['message'])
 
 async def run_test():
     try:
