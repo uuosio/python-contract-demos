@@ -21,7 +21,7 @@ async def update_code_auth(uuosapi):
         }
     }
 
-    return uuosapi.push_action(config.system_contract, 'updateauth', a, {'hello':'active'})
+    return await uuosapi.push_action(config.system_contract, 'updateauth', a, {'hello':'active'})
 
 async def test():
     wallet.create('test')
@@ -32,7 +32,7 @@ async def test():
     try:
         r = await update_code_auth(uuosapi)
     except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
+        print('+++update_code_auth error:', e.error.message)
 
     try:
         r = await uuosapi.deploy_contract('hello', code, abi, vm_type=1)
