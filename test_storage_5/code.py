@@ -22,9 +22,6 @@ class ChatGroup(object):
     def get_primary_key(self):
         return self.group_name
 
-    def __repr__(self):
-        return (self.index, self.account, self.msg)
-
     def __str__(self):
         data = (self.index, self.account, self.msg)
         return json.dumps(data)
@@ -49,9 +46,6 @@ class ChatMessage(object):
 
     def get_primary_key(self):
         return self.index
-
-    def __repr__(self):
-        return (self.index, self.account, self.msg)
 
     def __str__(self):
         data = (self.index, self.account, self.msg)
@@ -89,15 +83,13 @@ def apply(receiver, first_receiver, action):
         chat_group.payer = chat.account
         chat_group_db.store(chat_group)
 
+        chatdb = db.ChainDBKey64(self_contract, self_contract, name(group_name), ChatMessage)
         
-        if chat_group.count > 10:
-        # if chain.get_table_count(self_contract, self_contract, name(chat.group)) > 10:
-            itr = chain.db_lowerbound_i64(self_contract, self_contract, name(group_name), 0)
+        if len(chatdb) >= 10:
+            itr = chatdb.lower_bound(0)
             if itr >= 0:
-                chain.db_remove_i64(itr)
+                chatdb.remove_by_itr(itr)
 
         chat.index = chat_group.count
-
-        chatdb = db.ChainDBKey64(self_contract, self_contract, name(group_name), ChatMessage)
         chatdb.store(chat)
 
