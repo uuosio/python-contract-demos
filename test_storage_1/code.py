@@ -20,9 +20,6 @@ class MyDataI64(object):
     def get_primary_key(self):
         return self.a
 
-    def __repr__(self):
-        return (self.a, self.b, self.c, self.d)
-
     def __str__(self):
         data = (self.a, self.b, self.c, self.d)
         return json.dumps(data)

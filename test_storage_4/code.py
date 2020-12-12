@@ -28,9 +28,6 @@ class Counter(object):
     def get_primary_key(self):
         return self.primary_key
 
-    def __repr__(self):
-        return self.count
-
     def __str__(self):
         return str(self.count)
 

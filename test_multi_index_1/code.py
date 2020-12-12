@@ -32,9 +32,6 @@ class MyData(object):
     def get_secondary_indexes():
         return (db.idx64, db.idx128, db.idx256, db.idx_double)
 
-    def __repr__(self):
-        return (self.a, self.b, self.c, self.d)
-
     def __str__(self):
         data = (self.a, self.b, self.c, self.d)
         return json.dumps(data)
