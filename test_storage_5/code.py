@@ -1,6 +1,7 @@
 import db
 import struct
 import chain
+import time
 
 class ChatGroup(object):
     def __init__(self, group_name, count=0):
@@ -36,12 +37,14 @@ class ChatMessage(object):
 
     def pack(self):
         account = int.to_bytes(self.account, 8, 'little')
-        return account + self.msg
+        time_seconds = int.to_bytes(chain.current_time(), 8, 'little')
+        return account + time_seconds + self.msg
 
     @classmethod
     def unpack(cls, data):
-        account, msg = data[:8], data[8:]
+        account, time_seconds, msg = data[:8], data[8:16], data[16:]
         account = int.from_bytes(account, 'little')
+        time_seconds = int.from_bytes(time_seconds, 'little')
         return cls(account, msg)
 
     def get_primary_key(self):
@@ -78,9 +81,9 @@ def apply(receiver, first_receiver, action):
         chain.require_auth(chat.account)
         
         chat_group = chat_group_db.load(group_name)
-        assert chat_group, 'group does not exists!!'
+        assert chat_group, 'group does not exists!'
         chat_group.count += 1
-        chat_group.payer = chat.account
+        chat_group.payer = 0
         chat_group_db.store(chat_group)
 
         chatdb = db.ChainDBKey64(self_contract, self_contract, name(group_name), ChatMessage)

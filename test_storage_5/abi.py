@@ -11,6 +11,10 @@
                     "type": "name"
                 },
                 {
+                    "name": "chat_time",
+                    "type": "time_point"
+                },
+                {
                     "name": "msg",
                     "type": "string"
                 }

@@ -1,5 +1,5 @@
 '''
-chat example
+on chain chat room example
 '''
 from uuoskit import chainapi, wallet
 
