@@ -64,8 +64,8 @@ def apply(receiver, code, action):
     d.payer = payer
     mi.store(d)
 
-    itr, primary, secondary = mi.idx_lowerbound(3, 5.0)
+    itr, primary, secondary = mi.idx_lower_bound(3, 5.0)
     print(itr, primary, secondary, mi[primary])
 
-    itr, primary, secondary = mi.idx_upperbound(3, 5.0)
+    itr, primary, secondary = mi.idx_upper_bound(3, 5.0)
     print(itr, primary, secondary, mi[primary])

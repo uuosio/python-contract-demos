@@ -63,8 +63,8 @@ def apply(receiver, code, action):
     d.payer = payer
     mi.store(d)
 
-    itr = mi.lowerbound(1)
+    itr = mi.lower_bound(1)
     print(itr, mi.get(itr))
 
-    itr = mi.upperbound(1)
+    itr = mi.upper_bound(1)
     print(itr, mi.get(itr))
