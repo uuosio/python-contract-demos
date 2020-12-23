@@ -1,5 +1,5 @@
+from wkpmdjdsztyu import hello
 def apply(receiver, first_receiver, action):
-    from wkpmdjdsztyu import hello
     hello.say_hello()
 
 '============='
