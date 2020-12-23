@@ -1,6 +1,10 @@
-import db
 import json
 import struct
+import chain
+import db
+
+def get_scope():
+    return name(chain.read_action_data()[:8])
 
 class MyDataI64(object):
     def __init__(self, a: int, b: int, c: int, d: float):
@@ -26,10 +30,10 @@ class MyDataI64(object):
         return json.dumps(data)
 
 def apply(receiver, first_receiver, action):
-    code = name('hello')
-    scope = name('hello')
+    code = receiver
+    scope = get_scope()
     table = name('table3')
-    payer = name('hello')
+    payer = receiver
 
     storage = db.ChainDBKey64(code, scope, table, MyDataI64)
     d = MyDataI64(1, 2, 3, 5.0)

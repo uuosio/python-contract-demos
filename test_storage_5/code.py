@@ -54,7 +54,7 @@ class ChatMessage(object):
         data = (self.index, self.account, self.msg)
         return json.dumps(data)
 
-self_contract = name('hello')
+self_contract = chain.current_receiver()
 
 chat_group_db = db.ChainDBKey64(self_contract, self_contract, name('groups'), ChatGroup)
 

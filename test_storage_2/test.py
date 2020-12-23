@@ -4,34 +4,34 @@ pack/unpack data with struct module
 for more information about struct module, please refer to the following link:
 https://docs.python.org/3/library/struct.html
 '''
-from uuoskit import chainapi, wallet
-
+from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper
+
+
 src, abi = test_helper.load_code()
 
-async def test():
-    wallet.create('test')
-    wallet.import_key('test', '5JRYimgLBrRLCBAcjHUWCYRv3asNedTYYzVgmiU4q2ZVxMBiJXL')
-    uuosapi = chainapi.ChainApiAsync('http://127.0.0.1:8888')
-    code = await uuosapi.compile('hello', src, vm_type=1)
+# Replace the following default test account and test private key
+# with your own. Because someone may use the same test account at the same time,
+# that will cause conflict. If you don't have a test account,
+# go to https://testnet.eos.io and get one.
+test_account1 = 'wkpmdjdsztyu'
+wallet.import_key('test', '5Jaz37nnxbpAiAGQEsyxtnGfCPTJFjX9Wn6zv7V41Ko6DXSqhd9')
+
+
+async def run_test():
+    uuosapi = chainapi.ChainApiAsync(config.network_url)
+    code = await uuosapi.compile(test_account1, src, vm_type=1)
 
     try:
-        r = await uuosapi.deploy_contract('hello', code, abi, vm_type=1)
+        r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
     except chainapi.ChainException as e:
         print('+++deploy error:', e.error.message)
 
     args = 'hello,world'
-    try:
-        r = await uuosapi.push_action('hello', 'sayhello', args, {'hello': 'active'})
-        print(r['processed']['action_traces'][0]['console'])
-    except chainapi.ChainException as e:
-        print(e)
-        print(e.error['json']['error']['details'][1]['message'])
+    r = await uuosapi.exec(test_account1, args)
+    test_helper.print_console(r)
 
-async def run_test():
-    try:
-        await test()
-    except Exception as e:
-        print(e)
 
-test_helper.run(run_test())
+
+
+

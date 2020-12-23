@@ -1,6 +1,6 @@
 import chain
 def apply(receiver, first_receiver, action):
-    signature = chain.read_action_data()
+    signature = chain.read_action_data()[8:]
     digest = chain.sha256('hello,world')
     pub_key = chain.recover_key(digest, signature)
     print(pub_key)

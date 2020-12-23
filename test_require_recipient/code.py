@@ -1,14 +1,9 @@
 #send notify
 import chain
 def apply(receiver, first_receiver, action):
-    print('send notify:')
-    chain.require_recipient(name('helloworld11'))
-
-#*code separator*#
-
-#notify receiver
-import chain
-def apply(receiver, first_receiver, action):
-    if receiver != first_receiver:
-        data = chain.read_action_data()
-        print('on notify:', receiver, first_receiver, action, data)
+    data = chain.read_action_data()
+    notify_to = data[8:16]
+    notify_to = name(notify_to)
+    print('send notify:', notify_to)
+    assert chain.is_account(notify_to), 'notify to account does not exists!'
+    chain.require_recipient(notify_to)

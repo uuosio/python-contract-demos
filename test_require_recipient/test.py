@@ -1,42 +1,50 @@
-from uuoskit import chainapi, wallet
-
+from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper
+
+
 src, abi = test_helper.load_code()
-src1, src2 = src.split('#*code separator*#')
 
-async def test():
-    wallet.create('test')
-    # import active key for hello
-    wallet.import_key('test', '5JRYimgLBrRLCBAcjHUWCYRv3asNedTYYzVgmiU4q2ZVxMBiJXL')
-    # import active key for helloworld11
-    wallet.import_key('test', '5Jbb4wuwz8MAzTB9FJNmrVYGXo4ABb7wqPVoWGcZ6x8V2FwNeDo')
-    uuosapi = chainapi.ChainApiAsync('http://127.0.0.1:8888')
 
-    code1 = await uuosapi.compile('hello', src1)
-    code2 = await uuosapi.compile('hello', src2)
+# Replace the following default test account and test private key
+# with your own. Because someone may use the same test account at the same time,
+# that will cause conflict. If you don't have a test account,
+# go to https://testnet.eos.io and get one.
+test_account1 = 'wkpmdjdsztyu'
+wallet.import_key('test', '5Jaz37nnxbpAiAGQEsyxtnGfCPTJFjX9Wn6zv7V41Ko6DXSqhd9')
 
-    try:
-        r = await uuosapi.deploy_contract('hello', code1, abi, vm_type=1)
-    except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
+test_account2 = test_helper.test_account2
 
-    try:
-        r = await uuosapi.deploy_contract('helloworld11', code2, abi, vm_type=1)
-    except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
 
-    args = 'hello,world'
-    try:
-        r = await uuosapi.push_action('hello', 'sayhello', args, {'hello': 'active'})
-        print(r['processed']['action_traces'][0]['console'])
-        print(r['processed']['action_traces'][0]['inline_traces'][0]['console'])
-    except chainapi.ChainException as e:
-        print(e)
+'''
+#include <eosio/print.hpp>
+extern "C" void apply(uint64_t receiver, uint64_t first_receiver, uint64_t action) {
+    if (receiver != first_receiver) {
+        eosio::print("notify received");
+    } else {
+        eosio::print("hello,world");
+    }
+}
+'''
+
+# wasm code deploy to test_account2
+wasm_code = b'\x00asm\x01\x00\x00\x00\x01\x1a\x05`\x01\x7f\x00`\x02\x7f\x7f\x00`\x03\x7f\x7f\x7f\x01\x7f`\x00\x00`\x03~~~\x00\x02.\x03\x03env\x06prints\x00\x00\x03env\x0ceosio_assert\x00\x01\x03env\x06memset\x00\x02\x03\x05\x04\x03\x03\x00\x04\x04\x05\x01p\x01\x01\x01\x05\x03\x01\x00\x01\x06\x16\x03\x7f\x01A\x80\xc0\x00\x0b\x7f\x00A\xac\xc0\x00\x0b\x7f\x00A\xac\xc0\x00\x0b\x07\t\x01\x05apply\x00\x06\nd\x04\x04\x00\x10\x04\x0b6\x01\x01\x7f#\x00A\x10k"\x00A\x006\x02\x0cA\x00 \x00(\x02\x0c(\x02\x00A\x07jAxq"\x006\x02\x84@A\x00 \x006\x02\x80@A\x00?\x006\x02\x8c@\x0b\x02\x00\x0b#\x00\x10\x03\x02@ \x00 \x01R\r\x00A\xa0\xc0\x00\x10\x00A\x00\x10\x05\x0f\x0bA\x90\xc0\x00\x10\x00A\x00\x10\x05\x0b\x0b4\x03\x00A\x90\xc0\x00\x0b\x10notify received\x00\x00A\xa0\xc0\x00\x0b\x0chello,world\x00\x00A\x00\x0b\x040 \x00\x00'
+
 
 async def run_test():
-    try:
-        await test()
-    except Exception as e:
-        print(e)
+    uuosapi = chainapi.ChainApiAsync(config.network_url)
+    code1 = await uuosapi.compile(test_account1, src)
 
-test_helper.run(run_test())
+    try:
+        r = await uuosapi.deploy_contract(test_account1, code1, abi, vm_type=1)
+    except chainapi.ChainException as e:
+        print('+++deploy error:', e.error.message)
+
+    try:
+        r = await uuosapi.deploy_contract(test_account2, wasm_code, b'', vm_type=0)
+    except chainapi.ChainException as e:
+        print('+++deploy error2:', e.error.message)
+
+    args = uuosapi.s2b(test_account2)
+    r = await uuosapi.exec(test_account1, args)
+    print('+++1:', r['processed']['action_traces'][0]['console'])
+    print('+++2:', r['processed']['action_traces'][0]['inline_traces'][0]['console'])

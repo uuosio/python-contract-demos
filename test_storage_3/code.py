@@ -1,5 +1,7 @@
-import db
 import json
+import chain
+import db
+
 class MyDataI256(object):
     def __init__(self, a: int, b: int, c: int, d: float):
         self.a = a
@@ -25,10 +27,10 @@ class MyDataI256(object):
         return json.dumps(data)
 
 def apply(receiver, first_receiver, action):
-    code = name('hello')
-    scope = name('hello')
+    code = receiver
+    scope = get_scope()
     table = name('table3')
-    payer = name('hello')
+    payer = receiver
 
     storage = db.ChainDBKey256(code, scope, table, MyDataI256)
     primary_key = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

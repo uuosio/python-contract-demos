@@ -1,13 +1,20 @@
-import db
 import struct
 import chain
+import db
+
+def get_scope():
+    return name(chain.read_action_data()[:8])
 
 class Counter(object):
 
     def __init__(self):
-        self.storage = db.ChainDBKey64(name('hello'), name('hello'), name('table3'), type(self))
+        receiver = chain.current_receiver()
+        code = receiver
+        scope = get_scope()
+        payer = receiver
+        self.storage = db.ChainDBKey64(code, scope, name('table3'), type(self))
         self.primary_key = chain.s2n('counter')
-        self.payer = name('hello')
+        self.payer = payer
         self.count = self.load()
         if self.count is None:
             self.count = 0

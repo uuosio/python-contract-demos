@@ -1,65 +1,58 @@
-from uuoskit import chainapi, wallet
-
+from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper
+
+
 src, abi = test_helper.load_code()
 
-async def test():
-    wallet.create('test')
-    wallet.import_key('test', '5JRYimgLBrRLCBAcjHUWCYRv3asNedTYYzVgmiU4q2ZVxMBiJXL')
-    uuosapi = chainapi.ChainApiAsync('http://127.0.0.1:8888')
-    code = await uuosapi.compile('hello', src, vm_type=1)
+test_account1 = test_helper.test_account1
+test_account2 = test_helper.test_account2
+
+async def run_test():
+    uuosapi = chainapi.ChainApiAsync(config.network_url)
+    code = await uuosapi.compile(config.python_contract, src, vm_type=1)
+
     try:
-        r = await uuosapi.deploy_contract('hello', code, abi, vm_type=1)
+        r = await uuosapi.deploy_contract(config.python_contract, code, abi, vm_type=1)
     except chainapi.ChainException as e:
         print('+++deploy error:', e.error.message)
 
     args = {
-        'issuer':'hello',
+        'issuer':test_account1,
         'maximum_supply':'1000.0000 TTT'
     }
     try:
-        r = await uuosapi.push_action('hello', 'create', args, {'hello': 'active'})
-        print(r['processed']['action_traces'][0]['console'])
+        r = await uuosapi.push_action(config.python_contract, 'create', args, {test_account1: 'active'})
+        test_helper.print_console(r)
     except chainapi.ChainException as e:
         msg = e.error.json.error.details[0].message
         print('+++create:', msg)
 
     args = {
-        'to':'hello',
-        'quantity':'10.0000 TTT',
-        'memo':'issue 10 TTT to hello'
+        'to': config.python_contract,
+        'quantity': '10.0000 TTT',
+        'memo': f'issue 10 TTT to {config.python_contract}'
     }
 
-    balance1 = await uuosapi.get_balance('hello', token_account='hello', token_name='TTT')
+    balance1 = await uuosapi.get_balance(config.python_contract, token_account=config.python_contract, token_name='TTT')
     try:
-        r = await uuosapi.push_action('hello', 'issue', args, {'hello': 'active'})
-        print(r['processed']['action_traces'][0]['console'])
+        r = await uuosapi.push_action(config.python_contract, 'issue', args, {test_account1: 'active'})
+        test_helper.print_console(r)
     except chainapi.ChainException as e:
-        print(e)
-    balance2 = await uuosapi.get_balance('hello', token_account='hello', token_name='TTT')
+        print('+++issue error:', e)
+    balance2 = await uuosapi.get_balance(config.python_contract, token_account=config.python_contract, token_name='TTT')
     print(balance1, balance2)
 
     args = {
-        'from':'hello',
-        'to':'uuos',
-        'quantity':'10.0000 TTT',
-        'memo':'transfer 10 TTT to uuos'
+        'from': config.python_contract,
+        'to': test_account2,
+        'quantity': '10.0000 TTT',
+        'memo': f'transfer 10 TTT to {test_account2}'
     }
 
-    balance1 = await uuosapi.get_balance('uuos', token_account='hello', token_name='TTT')
-    try:
-        r = await uuosapi.push_action('hello', 'transfer', args, {'hello': 'active'})
-        print(r['processed']['action_traces'][0]['console'])
-        print('+++transfer:', r['processed']['elapsed'])
-    except chainapi.ChainException as e:
-        print(e)
-    balance2 = await uuosapi.get_balance('uuos', token_account='hello', token_name='TTT')
+    balance1 = await uuosapi.get_balance(config.python_contract, token_account=config.python_contract, token_name='TTT')
+    r = await uuosapi.push_action(config.python_contract, 'transfer', args, {config.python_contract: 'active'})
+    test_helper.print_console(r)
+    print('+++transfer:', r['processed']['elapsed'])
+
+    balance2 = await uuosapi.get_balance(test_account2, token_account=config.python_contract, token_name='TTT')
     print(balance1, balance2)
-
-async def run_test():
-    try:
-        await test()
-    except Exception as e:
-        print(e)
-
-test_helper.run(run_test())

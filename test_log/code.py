@@ -3,7 +3,10 @@ import struct
 import chain
 import uio
 
-self_contract = name('hello')
+self_contract = chain.current_receiver()
+
+def get_scope():
+    return name(chain.read_action_data()[:8])
 
 class Log(object):
     def __init__(self, raw=b''):
@@ -26,7 +29,8 @@ class Log(object):
 
 class LogDB(object):
     def __init__(self):
-        self.log_db = db.ChainDBKey64(self_contract, self_contract, name('log'), Log)
+        scope = get_scope()
+        self.log_db = db.ChainDBKey64(self_contract, scope, name('log'), Log)
 
     def init(self):
         itr = self.log_db.find(0)
@@ -36,7 +40,7 @@ class LogDB(object):
         raw = bytes(8)
         log = Log(raw)
         log.index = 0
-        log.payer = name('hello')
+        log.payer = self_contract
         self.log_db.store(log)
 
         # max 10 logs
@@ -44,7 +48,7 @@ class LogDB(object):
         for i in range(1, 11):
             log = Log(raw)
             log.index = i
-            log.payer = name('hello')
+            log.payer = self_contract
             self.log_db.store(log)
 
     def log(self):
@@ -76,7 +80,9 @@ class LogDB(object):
 
 logdb = LogDB()
 def apply(receiver, first_receiver, action):
-    if action == name('initlog'):
+    data = chain.read_action_data()
+    code, method = struct.unpack('QQ', data[:16])
+    if method == chain.s2n('initlog'):
         logdb.init()
         return
 

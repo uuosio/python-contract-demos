@@ -1,9 +1,9 @@
 import chain
 def apply(receiver, first_receiver, action):
     if action == name('testinline'):
-        account = name('hello')
+        account = receiver
         action = name('sayhello')
-        actor = name('hello')
+        actor = receiver
         permission = name('active')
         data = b'hello,world'
         chain.send_inline(account, action, actor, permission, data)

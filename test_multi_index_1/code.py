@@ -1,6 +1,10 @@
 import json
 import struct
+import chain
 import db
+
+def get_scope():
+    return name(chain.read_action_data()[:8])
 
 class MyData(object):
     def __init__(self, a: int, b: int, c: int, d: float):
@@ -37,9 +41,9 @@ class MyData(object):
         return json.dumps(data)
 
 def apply(receiver, code, action):
-    code = name('hello')
-    scope = name('hello')
-    payer = name('hello')
+    code = receiver
+    scope = get_scope()
+    payer = receiver
 
     table = name('table')
     mi = db.MultiIndex(code, scope, table, MyData)

@@ -1,6 +1,5 @@
-import chain
-import time
 import struct
+import chain
 
 TOKEN_SYMBOL = int.from_bytes(b'\x04TTT\x00\x00\x00\x00', 'little')
 
