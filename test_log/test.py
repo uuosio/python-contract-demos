@@ -14,6 +14,33 @@ src, abi = test_helper.load_code()
 test_account1 = 'wkpmdjdsztyu'
 wallet.import_key('test', '5Jaz37nnxbpAiAGQEsyxtnGfCPTJFjX9Wn6zv7V41Ko6DXSqhd9')
 
+async def show_log(uuosapi, old_state):
+    a = None
+    for i in range(5):
+        r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', '', '', 1)
+        a = r['rows'][0]
+        a = bytes.fromhex(a)
+        if not old_state == a:
+            break
+
+    total_logs = int.from_bytes(a[:4], 'little')
+    pos = int.from_bytes(a[4:], 'little')
+
+
+    lower_bound = uuosapi.n2s(0)
+    upper_bound = uuosapi.n2s(11)
+    r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', lower_bound, upper_bound, 11)
+
+    print('+++cout:', chainapi.count)
+    print('++++pos:', pos, len(r['rows']))
+    for i in range(1, len(r['rows'])):
+        row = r['rows'][pos]
+        row = bytes.fromhex(row)
+        last = row.find(b'\x00')
+        print(row[:last].decode('utf8'))
+        pos -= 1
+        if pos < 1:
+            pos = total_logs
 
 async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
@@ -28,36 +55,11 @@ async def run_test():
     if not hasattr(chainapi, 'count'):
         chainapi.count = 0
     chainapi.count += 1
-    print(chainapi.count)
-
-    args = uuosapi.s2b('initlog')
-    try:
-        r = await uuosapi.exec(test_account1, args)
-        test_helper.print_console(r)
-        print(r['processed']['elapsed'])
-    except chainapi.ChainException as e:
-        print('+++error:', e)
+    r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', '', '', 1)
+    old_state = r['rows'][0]
 
     args = 'hello,world' + str(chainapi.count)
     r = await uuosapi.exec(test_account1, args)
     test_helper.print_console(r)
 
-    r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', '', '', 1)
-    a = r['rows'][0]
-    a = bytes.fromhex(a)
-
-    total_logs = int.from_bytes(a[:4], 'little')
-    pos = int.from_bytes(a[4:], 'little')
-
-    lower_bound = uuosapi.n2s(0)
-    upper_bound = uuosapi.n2s(11)
-    r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', lower_bound, upper_bound, 11)
-    print('++++pos:', pos, len(r['rows']))
-    for i in range(1, len(r['rows'])):
-        row = r['rows'][pos]
-        row = bytes.fromhex(row)
-        last = row.find(b'\x00')
-        print(row[:last].decode('utf8'))
-        pos -= 1
-        if pos < 1:
-            pos = total_logs
+    await show_log(uuosapi, old_state)

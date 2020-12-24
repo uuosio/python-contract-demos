@@ -52,6 +52,7 @@ class LogDB(object):
             self.log_db.store(log)
 
     def log(self):
+        self.init()
         log_head = self.log_db.load(0)
         total_log, pos = struct.unpack('ii', log_head.raw[:8])
 
@@ -80,12 +81,6 @@ class LogDB(object):
 
 logdb = LogDB()
 def apply(receiver, first_receiver, action):
-    data = chain.read_action_data()
-    code, method = struct.unpack('QQ', data[:16])
-    if method == chain.s2n('initlog'):
-        logdb.init()
-        return
-
     chain.enable_log(True)
     data = chain.read_action_data()
     print(data)
