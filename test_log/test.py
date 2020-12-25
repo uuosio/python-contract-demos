@@ -59,7 +59,9 @@ async def run_test():
         chainapi.count = 0
     chainapi.count += 1
     r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', '', '', 1)
-    old_state = r['rows'][0]
+    old_state = None
+    if r['rows']:
+        old_state = r['rows'][0]
 
     args = 'hello,world' + str(chainapi.count)
     r = await uuosapi.exec(test_account1, args)
