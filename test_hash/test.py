@@ -16,8 +16,12 @@ src, abi = test_helper.load_code()
 # with your own. Because someone may use the same test account at the same time,
 # that will cause conflict. If you don't have a test account,
 # go to https://testnet.eos.io and get one.
-test_account1 = 'wkpmdjdsztyu'
-wallet.import_key('test', '5Jaz37nnxbpAiAGQEsyxtnGfCPTJFjX9Wn6zv7V41Ko6DXSqhd9')
+if config.network == 'EOS_TESTNET':
+    test_account1 = 'wkpmdjdsztyu'
+    wallet.import_key('test', '5Jaz37nnxbpAiAGQEsyxtnGfCPTJFjX9Wn6zv7V41Ko6DXSqhd9')
+else:
+    test_account1 = 'helloworld11'
+
 
 
 async def run_test():
