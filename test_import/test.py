@@ -21,10 +21,8 @@ async def run_test():
     # if a module deployed used by contract has been changed
     # deploy_contract must call again to reflect the changes made in the module
     code = await uuosapi.compile(test_account1, src1, vm_type=1)
-    try:
-        r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
-    except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
+
+    r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
 
     args = uuosapi.s2b(test_account1)
     r = await uuosapi.exec(test_account1, args)

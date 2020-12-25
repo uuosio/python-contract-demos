@@ -3,7 +3,7 @@ import time
 def apply(receiver, first_receiver, action):
     print(time.time())
     print(chain.current_time())
-    print(chain.is_account('hello'), chain.is_account('none'))
+    print(chain.is_account(receiver), chain.is_account('none'))
     print(chain.tapos_block_num())
     print(chain.tapos_block_prefix())
     print(chain.expiration())

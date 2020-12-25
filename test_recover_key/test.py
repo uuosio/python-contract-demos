@@ -19,10 +19,7 @@ async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
     code = await uuosapi.compile(test_account1, src, vm_type=1)
 
-    try:
-        r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
-    except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
+    r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
 
     # signature of sha256 of 'hello,world'
     args = 'SIG_K1_KZ1AHkUJcdCnyogKcuymZ5Qc3bj2hqomZrkDHQgzuLhS37LyMYEFbYNuzcAB2wLTJjKN1koPR4aJQ3nxAegyVGVK9WqKsP'

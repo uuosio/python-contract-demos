@@ -40,10 +40,8 @@ async def run_test():
     code = await uuosapi.compile(test_account1, src, vm_type=1)
     await update_code_auth(uuosapi)
     print(config.main_token_contract)
-    try:
-        r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
-    except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
+
+    r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
     
     memo = 'helloworld51-0003ff99995d1ec79e7662bc7ffa076aeceda00fb9540406091ad36bf8f2ec58d651'
     r = await uuosapi.transfer(test_account2, test_account1, 1.0, memo)
