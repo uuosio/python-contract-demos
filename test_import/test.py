@@ -14,7 +14,8 @@ if config.network == 'EOS_TESTNET':
 else:
     test_account1 = 'helloworld11'
 
-
+if config.network == 'UUOS_TESTNET':
+    src1 = src1.replace('wkpmdjdsztyu', 'helloworld11')
 
 async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
