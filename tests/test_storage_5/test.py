@@ -10,6 +10,9 @@ src, abi = test_helper.load_code()
 test_account1 = test_helper.test_account1
 
 async def run_test():
+    if config.system_contract == 'eosio':
+        print('This example only works on uuos network currently')
+        return
     uuosapi = chainapi.ChainApiAsync(config.network_url)
     code = await uuosapi.compile(test_account1, src, vm_type=1)
 
