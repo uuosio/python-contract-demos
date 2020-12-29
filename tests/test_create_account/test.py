@@ -31,7 +31,7 @@ test_account2 = test_helper.test_account2
 
 async def run_test():
     if config.network == 'EOS_TESTNET':
-        print('This example not work no EOS Testnet')
+        print('This example not work on EOS Testnet')
         return
     uuosapi = chainapi.ChainApiAsync(config.network_url)
     code = await uuosapi.compile(test_account1, src, vm_type=1)
