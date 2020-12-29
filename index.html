@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Tutorials - UUOS</title>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZB4LJ9YRT9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZB4LJ9YRT9');
+</script>
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '<%- theme.google_analytics %>', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+<script type="text/javascript" src="./js/micropython/micropython.js"></script>
+<script type="text/javascript" src="./js/micropython/micropython_init.js"></script>
+
+<link rel="stylesheet" href="./css/brython.css">
+<link rel="stylesheet" href="./css/console.css">
+<link rel="icon" href="/images/logo.png" type="image/png">
+
+<script type="text/javascript" src="./js/brython.js"></script>
+<!-- <script type="text/javascript" src="./js/brython_stdlib.js"></script> -->
+<script type="text/javascript" src="./js/brython_modules.js"></script>
+<script src="./js/assets/header.brython.js"></script>
+
+<script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/ace/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript" src='./js/eosjs-api.js'></script>
+<script type="text/javascript" src='./js/eosjs-jsonrpc.js'></script>
+<script type="text/javascript" src='./js/eosjs-jssig.js'></script>
+<script type="text/javascript" src='./js/eosjs-serialize.js'></script>
+<script type="text/javascript" src='./uuoskit/eosjs_wrapper.js'></script>
+
+
+<!-- Javascript code needed to run tests included in dom.py -->
+<script src="./dom_js_tests.js"></script>
+<script src="./jsobj_tests.js"></script>
+
+<!-- Needed in sys.path init tests , see test_import.py -->
+<link id="link_none1" rel="pythonpath" href="/nowhere1" hreflang="none" />
+<link id="link_none2" rel="pythonpath" href="/nowhere2" hreflang="x-none" />
+
+</head>
+
+<body onload="brython({debug:1, static_stdlib_import:true})">
+
+<script type="text/python3" id="translations">
+from browser import document as doc
+
+# other translations
+
+trans = {
+  'report_bugs':{'en': 'Please report bugs in the ',
+                  'es': 'Poner los bugs en el ',
+                  'fr': "Signalez les bugs dans l'"},
+  'test_page':{'en': 'Tests page',
+                'es': 'Página de pruebas', 
+                'fr':' Page de tests'},
+  'run':{'en': '>>RUN<<', 'es': 'ejecutar', 'fr': 'exécuter'},
+  'clear':{'en': 'clear', 'es': 'borrar', 'fr': 'effacer'}
+}
+
+</script>
+
+<style>
+  body {font-family: Arial;}
+  
+  /* Style the tab */
+  .tab {
+    display: none;
+    height: 40px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+  }
+  
+  /* Style the buttons inside the tab */
+  .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color: #ddd;
+  }
+  
+  /* Create an active/current tablink class */
+  .tab button.active {
+    background-color: #ccc;
+  }
+  
+  /* Style the tab content */
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+    width:100%;
+    height:90%;
+  }
+</style>
+
+<!-- HTML needed to run tests included in dom.py -->
+<div id="dom-test-element-id"></div>
+
+<div stype="padding: 40px 150px 0;position: relative" id="banner_row">
+<span>
+  <a id="logo" href="/">
+    <img src="/images/logo.png" style="width:30;height:30px;" alt="logo">
+  </a>
+</span>
+</div>
+
+<table id="container">
+  <tr>
+    <td>
+
+    </td>
+
+    <td>
+        <div style="padding: 3px 3px 3px 3px;">
+            <div style="float:left">
+                TEST:
+                <select name="filename" id="files">
+                  <optgroup label="Basic">
+                    <option value="test_helloworld">hello world</option>
+                    <option value="test_name">name object</option>
+                    <option value="test_float128">float128 object</option>
+                    <option value="test_bytesio">BytesIO example</option>
+                    <option value="test_math">math module</option>
+                    <option value="test_import">import custom module</option>
+                  </optgroup>
+                    <optgroup label="Chain apis">
+                    <option value="test_assert">assertion apis</option>
+                    <option value="test_authorization">authorization apis</option>
+                    <option value="test_inline_action">inline action</option>
+                    <option value="test_require_recipient">require_recipient</option>
+                    <option value="test_block_info">block information apis</option>
+                    </optgroup>
+                    <optgroup label="Crypto">
+                    <option value="test_hash">hash functions</option>
+                    <option value="test_recover_key">recovery_key</option>
+                    </optgroup>
+                    <optgroup label="Storage">
+                    <option value="test_storage_1">persistent storage 1</option>
+                    <option value="test_storage_2">persistent storage 2</option>
+                    <option value="test_storage_3">persistent storage 3</option>
+                    <option value="test_storage_4">persistent storage 4</option>
+                    <option value="test_multi_index_1">multi-index 1</option>
+                    <option value="test_multi_index_2">multi-index 2</option>
+                    <option value="test_multi_index_3">multi-index 3</option>
+                    </optgroup>
+                    <optgroup label="Advanced">
+                    <option value="test_call_wasm_contract">call wasm contract</option>
+                    <option value="test_token">token example</option>
+                    <option value="test_storage_5">on chain chat room</option>
+                    <option value="test_create_account">create account on chain</option>
+                    <option value="test_log">on chain log</option>
+                  </optgroup>
+                </select>
+            </div>
+            <div style="float:left;margin-left:5px;margin-right:5px;">
+              NETWORK:
+              <select name="filename" id="networks">
+                <option value="Eos_Testnet">Eos Testnet</option>
+                <!--
+                <option value="Jungle-Testnet">Jungle-Testnet</option>
+                <option value="CryptoKylin Testnet">CryptoKylin Testnet</option>
+                -->
+                <option value="UUOS_Testnet">UUOS Testnet</option>
+                <option value="UUOS_Testnet2">UUOS Testnet2</option>
+              </select>
+            </div>
+        <div style="float:left;padding: 0px 0px 0px 0px;">
+          <button id="run" style="margin-left:5px;margin-right:5px;">--RUN--</button>
+          DEBUG
+          <input type="checkbox" id="set_debug" checked>
+        </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td id="right">
+      <div style="width:100%;height:100%;">
+      <textarea id="console" autocomplete="off"></textarea>
+      </div>
+    </td>
+    <td>
+      <div class="tab" id='id_tabs'>
+        <button class="tablinks" id='btn_code'>Code</button>
+        <button class="tablinks" id='btn_abi'>Abi</button>
+        <button class="tablinks" id='btn_test'>Test</button>
+      </div>
+
+      <div id="code" class="tabcontent">
+        <div id="editor" style="width:100%;height:100%;"></div>
+      </div>
+
+      <div id="abi" class="tabcontent">
+        <div id="editor_abi" style="width:100%;height:100%;"></div>
+      </div>
+
+      <div id="test" class="tabcontent">
+        <div id="editor_test" style="width:100%;height:100%;"></div>
+      </div>
+    </td>
+  </tr>
+
+</table>
+
+<style>
+  html, body {
+      height: 100%;
+  }
+  #htmlEditor, #cssEditor, #jsEditor, #editor_test  {
+  height:80%
+  }
+</style>
+
+<script>
+
+  var editor = ace.edit("editor_abi");
+  editor.getSession().setUseWorker(false);
+  editor.setTheme("ace/theme/solarized_light");
+  editor.getSession().setMode("ace/mode/python");    
+
+  editor = ace.edit("editor");
+  editor.getSession().setUseWorker(false);
+  editor.setTheme("ace/theme/solarized_light");
+  editor.getSession().setMode("ace/mode/python");    
+
+
+  editor = ace.edit("editor_test");
+  editor.getSession().setUseWorker(false);
+  editor.setTheme("ace/theme/solarized_light");
+  editor.getSession().setMode("ace/mode/python");    
+
+  function on_tab_click(evt, content_id) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(content_id).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  tablinks[0].className += " active";
+  document.getElementById('code').style.display = "block";
+  document.getElementById('id_tabs').style.display = "block";
+  
+  var index = localStorage.getItem('selected_file_index');
+  if (index) {
+    var select = document.getElementById('files');
+    select.selectedIndex = index;
+    // select.text = select.options[index].text;
+  }
+</script>
+
+<div id="legend">
+    Python code editor uses <a href="https://ace.c9.io/" target="_blank">Ace</a>.
+</div>
+
+
+<script type="text/python3" id="tests" src='./tutorial_tests.py'></script>
+</body>
+</html>
+
