@@ -7,7 +7,7 @@ def apply(receiver, first_receiver, action):
         permission = name('active')
         data = b'hello,world'
         chain.send_inline(account, action, actor, permission, data)
-        print('inline action sended')
+        print('inline action sent')
     elif action == name('sayhello'):
         data = chain.read_action_data()
         print(data)
