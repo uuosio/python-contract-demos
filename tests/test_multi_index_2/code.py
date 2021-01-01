@@ -48,13 +48,10 @@ def apply(receiver, code, action):
     table = name('table')
     mi = db.MultiIndex(code, scope, table, MyData)
 
-    try:
-        itr = mi.find(1)
-        if itr >= 0:
-            data = mi.get(itr)
-            print(data.a, data.b, data.c, data.d)
-    except Exception as e:
-        print(e)
+    itr = mi.find(1)
+    if itr >= 0:
+        data = mi.get(itr)
+        print(data.a, data.b, data.c, data.d)
 
     d = MyData(1, 2, 3, 5.0)
     d.payer = payer
