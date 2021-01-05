@@ -260,7 +260,7 @@ class ChainApiAsync():
     async def deploy_contract(self, account, code, abi, vm_type=1, vm_version=0, sign=True, compress=0):
         print('+++deploy contract', account)
         if vm_type == 1:
-            return await self.deploy_contract_python(account, code, abi, vm_type, vm_version, sign, compress)
+            return await self.deploy_python_contract(account, code, abi, deploy_type=config.contract_deploy_type)
 
         return await self.deploy_contract_normal(account, code, abi, vm_type, vm_version, sign, compress)
 
@@ -270,11 +270,11 @@ class ChainApiAsync():
         # return await self.deploy_contract_python(account, code, abi, vm_type, vm_version, sign, compress)
 
     @jsobj2pyobj
-    async def deploy_contract_python(self, account, code, abi, vm_type=1, vm_version=0, sign=True, compress=0):
+    async def deploy_python_contract(self, account, code, abi, deploy_type=1):
         actions = []
 
         python_contract = None
-        if config.contract_deploy_type == 1:
+        if deploy_type == 1:
             python_contract = config.python_contract
         else:
             python_contract = account
@@ -285,8 +285,8 @@ class ChainApiAsync():
             #     pass
 
             args = {"account": account,
-                    "vmtype": vm_type,
-                    "vmversion": vm_version,
+                    "vmtype": 1,
+                    "vmversion": 0,
                     "code": '00'
             }
             try:
