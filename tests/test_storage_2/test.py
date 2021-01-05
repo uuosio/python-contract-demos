@@ -1,7 +1,7 @@
 '''
-example show how to store/load persistent data with 64 bit primary key and 
-pack/unpack data with struct module
-for more information about struct module, please refer to the following link:
+This example shows how to store/load persistent data with a 64-bit primary key and 
+pack/unpack data with struct module.
+For more information about struct module, please refer to the following link:
 https://docs.python.org/3/library/struct.html
 '''
 from uuoskit import chainapi, config, wallet

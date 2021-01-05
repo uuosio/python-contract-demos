@@ -1,5 +1,5 @@
 '''
-example for recover_key and assert_recover_key
+Example for recover_key and assert_recover_key
 '''
 from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper

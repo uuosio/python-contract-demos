@@ -1,6 +1,6 @@
 '''
-example show how to store/load persistent data with 64 bit primary key and 
-pack/unpack data with json module
+This example shows how to store/load persistent data with a 64-bit primary key and 
+pack/unpack data with JSON module.
 '''
 from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper

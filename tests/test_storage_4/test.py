@@ -1,5 +1,5 @@
 '''
-example show how to count number on chain
+This example shows how to count number on chain.
 '''
 from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper

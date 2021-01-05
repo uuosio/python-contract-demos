@@ -1,5 +1,5 @@
 '''
-on chain chat room example
+On chain chat room example
 '''
 from uuoskit import chainapi, config
 from uuoskit import test_helper

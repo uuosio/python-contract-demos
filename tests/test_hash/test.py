@@ -1,5 +1,5 @@
 '''
-example for the following hash functions:
+Example for the following hash functions:
 sha256
 sha1
 sha512

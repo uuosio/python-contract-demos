@@ -1,5 +1,5 @@
 '''
-example for call wasm contract:
+Example for call wasm contract.
 '''
 
 from uuoskit import chainapi, config, wallet

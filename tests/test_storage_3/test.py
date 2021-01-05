@@ -1,5 +1,5 @@
 '''
-example show how to store/load a 256 bit primary key data
+This example shows how to store/load a 256-bit primary key data
 '''
 from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper

@@ -1,5 +1,5 @@
 '''
-secondary lowerbound/upperbound example
+Secondary lowerbound/upperbound example
 '''
 from uuoskit import chainapi, config, wallet
 from uuoskit import test_helper
