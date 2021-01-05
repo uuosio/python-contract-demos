@@ -18,3 +18,7 @@ First install [UUOSKit](https://github.com/uuosio/uuoskit), then use the followi
 cd tests
 python3 test_runner.py --test-dir test_helloworld
 ```
+
+
+### License
+[MIT](./LICENSE)
