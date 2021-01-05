@@ -1,7 +1,7 @@
 Demos used by [Python Contract Tutorials](https://uuos.io/static/tutorials.html)
 
 
-# Starting from a local webserver
+# Running demos in a local web browser
 
 ```bash
 git clone https://github.com/uuosio/python-contract-demos
@@ -10,9 +10,9 @@ python3 -m pip install livereload
 livereload .
 ```
 
-# Running demo with UUOSKit
+# Running demos with UUOSKit
 
-First install [UUOSKit](https://github.com/uuosio/uuoskit), then use the following command to run the demos.
+First, install [UUOSKit](https://github.com/uuosio/uuoskit), then use the following command to run the demos.
 
 ```bash
 cd tests
