@@ -67,14 +67,14 @@ async def run_test():
         print('This example only works on uuos network')
         return
     uuosapi = chainapi.ChainApiAsync(config.network_url)
-    code = await uuosapi.compile(test_account1, src, vm_type=1)
+    code = uuosapi.mp_compile(test_account1, src)
 
     try:
         r = await uuosapi.deploy_contract(test_account2, wasm_code, wasm_abi, vm_type=0)
     except chainapi.ChainException as e:
         print('+++deploy error:', e.error.message)
 
-    r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
+    r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
 
     args = 'hello,world'
     try:

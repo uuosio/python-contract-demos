@@ -9,7 +9,7 @@ test_account2 = test_helper.test_account2
 
 async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
-    code = await uuosapi.compile(config.python_contract, src, vm_type=1)
+    code = uuosapi.mp_compile(config.python_contract, src)
 
     if config.contract_deploy_type == 1:
         uuosapi.deploy_abi(config.python_contract, abi)

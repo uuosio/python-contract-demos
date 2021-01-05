@@ -34,11 +34,11 @@ async def run_test():
         print('This example not work on EOS Testnet')
         return
     uuosapi = chainapi.ChainApiAsync(config.network_url)
-    code = await uuosapi.compile(test_account1, src, vm_type=1)
+    code = uuosapi.mp_compile(test_account1, src)
     await update_code_auth(uuosapi)
     print(config.main_token_contract)
 
-    r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
+    r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
     
     memo = 'helloworld51-0003ff99995d1ec79e7662bc7ffa076aeceda00fb9540406091ad36bf8f2ec58d651'
     r = await uuosapi.transfer(test_account2, test_account1, 1.0, memo)

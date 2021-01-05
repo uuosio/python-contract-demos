@@ -36,7 +36,7 @@ wasm_code = b'\x00asm\x01\x00\x00\x00\x01\x1a\x05`\x01\x7f\x00`\x02\x7f\x7f\x00`
 
 async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
-    code1 = await uuosapi.compile(test_account1, src)
+    code1 = uuosapi.mp_compile(test_account1, src)
 
     try:
         r = await uuosapi.deploy_contract(test_account1, code1, abi, vm_type=1)

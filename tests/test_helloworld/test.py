@@ -17,10 +17,11 @@ else:
 
 
 async def run_test():
+    print(config.network_url, test_account1, config.contract_deploy_type)
     uuosapi = chainapi.ChainApiAsync(config.network_url)
-    code = await uuosapi.compile(test_account1, src, vm_type=1)
+    code = uuosapi.mp_compile(test_account1, src)
 
-    r = await uuosapi.deploy_contract(test_account1, code, abi, vm_type=1)
+    r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
 
     args = 'hello,world'
     r = await uuosapi.exec(test_account1, args)

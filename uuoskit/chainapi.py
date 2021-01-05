@@ -62,6 +62,9 @@ class ChainApiAsync():
         s = self.api.pack_signature(s)
         return bytes.fromhex(s)
 
+    def set_public_key_prefix(self, prefix):
+        pass
+
     def unpack_abi(self, abi):
         return self.api.rawAbiToJson(abi)
 
@@ -271,7 +274,6 @@ class ChainApiAsync():
         actions = []
 
         python_contract = None
-        print('+++config.contract_deploy_type:', config.contract_deploy_type)
         if config.contract_deploy_type == 1:
             python_contract = config.python_contract
         else:
