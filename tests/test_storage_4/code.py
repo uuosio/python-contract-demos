@@ -38,8 +38,8 @@ class Counter(object):
     def __str__(self):
         return str(self.count)
 
+counter = Counter()
 def apply(receiver, first_receiver, action):
-    c = Counter()
-    c.count += 1
-    c.store()
-    print('counter is:', c)
+    counter.count += 1
+    counter.store()
+    print('counter is:', counter)
