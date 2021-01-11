@@ -68,6 +68,14 @@ class ChainApiAsync():
     def unpack_abi(self, abi):
         return self.api.rawAbiToJson(abi)
 
+    def set_abi(self, account, abi):
+        if isinstance(abi, dict):
+            abi = json.dumps(abi)
+        if isinstance(abi, str):
+            abi = javascript.JSON.parse(abi)
+
+        self.api.setCachedAbi(account, abi)
+
     def set_node(self, node_url):
         self.node_url = node_url
         self._rpc.endpoint = node_url
@@ -402,6 +410,14 @@ class ChainApiAsync():
             if not ret['error']['json']['error']['what'] == 'Contract is already running this version of code':
                 raise ChainException(ret.error)
         return ret
+
+    @jsobj2pyobj
+    async def pack_abi_type(self, account, typeName, data):
+        return await self.api.serializeAbiType(account, typeName, data)
+
+    @jsobj2pyobj
+    async def unpack_abi_type(self, account, typeName, data):
+        return await self.api.deserializeAbiType(account, typeName, data)
 
     @jsobj2pyobj
     async def deploy_py_code(self, account, code):

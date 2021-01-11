@@ -105,6 +105,24 @@ class ApiWrapper {
         }
     }
 
+    async serializeAbiType(account, typeName, data) {
+        try {
+            return await this.api.serializeAbiType(account, typeName, data);
+        } catch (err) {
+            console.error(err);
+            return {error: err};
+        }
+    }
+
+    async deserializeAbiType(account, typeName, data) {
+        try {
+            return await this.api.deserializeAbiType(account, typeName, data);
+        } catch (err) {
+            console.error(err);
+            return {error: err};
+        }
+    }
+
     hex2array(hex) {
         var bytes = new Uint8Array(Math.ceil(hex.length / 2));
         for (var i = 0; i < bytes.length; i++) {
