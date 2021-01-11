@@ -527,23 +527,20 @@ class ChainApiAsync():
                             )
 
     @jsobj2pyobj
-    async def python_contract_get_table_rows(self, json,
+    async def python_contract_get_table_rows(self,
                     code,
                     scope,
                     table,
                     lower_bound='',
                     upper_bound='',
-                    limit=10,
-                    key_type='',
-                    index_position=1,
-                    encode_type='dec'):
+                    limit=10):
         args = {
             'code': code,
             'scope': scope,
             'table': table,
             'lowerbound': lower_bound,
             'upperbound': upper_bound,
-            'limit': 1
+            'limit': limit
         }
         try:
             r = await self.push_action(config.python_contract, 'gettablerows', args, {config.python_contract:'active'})
