@@ -511,6 +511,34 @@ class ChainApiAsync():
                             )
 
     @jsobj2pyobj
+    async def python_contract_get_table_rows(self, json,
+                    code,
+                    scope,
+                    table,
+                    lower_bound='',
+                    upper_bound='',
+                    limit=10,
+                    key_type='',
+                    index_position=1,
+                    encode_type='dec'):
+        args = {
+            'code': code,
+            'scope': scope,
+            'table': table,
+            'lowerbound': lower_bound,
+            'upperbound': upper_bound,
+            'limit': 1
+        }
+        try:
+            r = await self.push_action(config.python_contract, 'gettablerows', args, {config.python_contract:'active'})
+        except Exception as e:
+            msg = e.error.error.json['error']['details'][0]['message']
+            if msg.startswith('assertion failure with message: '):
+                start = msg.rfind(': ')
+                msg = msg[start + 2:]
+                return msg
+
+    @jsobj2pyobj
     async def get_producer_schedule(self):
         return await self.rpc.get_producer_schedule()
 
