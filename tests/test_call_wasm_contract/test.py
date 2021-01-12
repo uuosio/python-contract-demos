@@ -72,7 +72,7 @@ async def run_test():
     try:
         r = await uuosapi.deploy_contract(test_account2, wasm_code, wasm_abi, vm_type=0)
     except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
+        print('+++deploy error:', e.json['message'])
 
     r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
 

@@ -35,7 +35,7 @@ async def run_test():
         r = await uuosapi.exec(test_account1, args)
         test_helper.print_console(r)
     except chainapi.ChainException as e:
-        print('++++error:', e.error.json['error']['details'][1]['message'])
+        print('++++error:', e.json['error']['details'][1]['message'])
     
     if not hasattr(chainapi, 'count'):
         chainapi.count = 0

@@ -39,6 +39,6 @@ async def run_test():
         test_helper.print_console(r)
     except chainapi.ChainException as e:
         print('+++test3, assertion raised:')
-        msg = e.error['json']['error']['details'][0]['message']
+        msg = e.json['error']['details'][0]['message']
         print(msg)
         assert msg == "assertion failure with message: bad action"

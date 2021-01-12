@@ -27,7 +27,6 @@ async def run_test():
         r = await uuosapi.push_action(test_account1, 'test2', args, {test_account1: 'active'})
         test_helper.print_console(r)
     except chainapi.ChainException as e:
-        msg = e.error.message
-        print('++++test2 error:', msg)
+        msg = e.json['error']['details'][0]['message']
         assert msg == f"missing authority of {test_account1}/owner"
 
