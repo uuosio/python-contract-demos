@@ -50,7 +50,8 @@ async def run_test():
     code = uuosapi.mp_compile(test_account1, src)
 
     try:
-        r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
+        r = await uuosapi.deploy_python_code(test_account1, code, deploy_type=1)
+        await uuosapi.deploy_abi(config.python_contract, abi)
         print('++++deploy time:', r['processed']['elapsed'])
     except chainapi.ChainException as e:
         print('+++deploy error:', e)

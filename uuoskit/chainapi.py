@@ -427,15 +427,36 @@ class ChainApiAsync():
         return await self.api.deserializeAbiType(account, typeName, data)
 
     @jsobj2pyobj
-    async def deploy_py_code(self, account, code):
+    async def deploy_python_code(self, account, code, deploy_type=1):
+        actions = []
+
+        python_contract = None
+        if deploy_type == 1:
+            python_contract = config.python_contract
+        else:
+            python_contract = account
+
+            args = {"account": account,
+                    "vmtype": 1,
+                    "vmversion": 0,
+                    "code": '00'
+            }
+            try:
+                await self.push_action(config.system_contract, 'setcode', args, {account:'active'})
+            except:
+                pass
+
+#        actions.append(setcode)
+
+        print('+++deploy_contract_python:', python_contract)
+
         args = self.s2b(account) + code
         args = bytes(args)
         args = args.hex().upper()
         args = '0x' + args
 
-        actions = []
         setcode = {
-            'account': config.python_contract,
+            'account': python_contract,
             'name': 'setcode',
             'authorization': [{
                 'actor': account,
