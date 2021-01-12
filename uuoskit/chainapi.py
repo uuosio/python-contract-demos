@@ -9,9 +9,16 @@ import json
 class ChainException(Exception):
     def __init__(self, err):
         super().__init__(err)
-        self.error = err
+        if isinstance(err, str):
+            self.error = err
+        elif 'error' in err:
+            self.error = err.error
+            if 'json' in self.error:
+                self.json = self.error.json
 
     def __str__(self):
+        if isinstance(self.error, str):
+            return self.error
         return javascript.JSON.stringify(self.error, None, ' ')
 
 def jsobj2pyobj(fn):
@@ -549,7 +556,8 @@ class ChainApiAsync():
             if msg.startswith('assertion failure with message: '):
                 start = msg.rfind(': ')
                 msg = msg[start + 2:]
-                return msg
+                rows = msg.split('\n')
+                return {'rows':rows}
 
     @jsobj2pyobj
     async def get_producer_schedule(self):
