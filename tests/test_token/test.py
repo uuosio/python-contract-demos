@@ -12,12 +12,12 @@ async def run_test():
     code = uuosapi.mp_compile(config.python_contract, src)
 
     if config.contract_deploy_type == 1:
-        uuosapi.deploy_abi(config.python_contract, abi)
+        await uuosapi.deploy_abi(config.python_contract, abi)
 
     try:
         r = await uuosapi.deploy_python_contract(config.python_contract, code, abi, deploy_type=1)
     except chainapi.ChainException as e:
-        print('+++deploy error:', e.error.message)
+        print('+++deploy error:', e.json['message'])
 
     args = {
         'issuer':test_account1,
@@ -27,7 +27,7 @@ async def run_test():
         r = await uuosapi.push_action(config.python_contract, 'create', args, {test_account1: 'active'})
         test_helper.print_console(r)
     except chainapi.ChainException as e:
-        msg = e.json.error.details[0].message
+        msg = e.json['error']['details'][0]['message']
         print('+++create:', msg)
 
     args = {
