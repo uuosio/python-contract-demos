@@ -132,8 +132,8 @@ class ChainApiAsync():
         return code
 
     async def compile(self, contract, code, vm_type=1):
-        assert vm_type == 1
-        if config.contract_deploy_type == 0:
+        assert vm_type == 1 or vm_type == 0x11
+        if vm_type == 0x11:
             return self.mp_compile_to_frozen(contract, code)
         else:
             return self.mp_compile(contract, code)
@@ -289,7 +289,7 @@ class ChainApiAsync():
         actions = []
 
         python_contract = None
-        if deploy_type == 1:
+        if config.contract_deploy_type == 1:
             python_contract = config.python_contract
         else:
             python_contract = account
