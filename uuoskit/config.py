@@ -18,16 +18,20 @@ def config_network(_system_contract, _main_token_contract, _main_token):
     main_token_contract = _main_token_contract
     main_token = _main_token
 
-def setup_uuos_network():
+def setup_uuos_test_network():
     global main_token
     global system_contract
     global main_token_contract
     global code_permission_name
-    main_token = 'UUOS'
-    system_contract = 'uuos'
-    main_token_contract = 'uuos.token'
-    network_url = 'http://127.0.0.1:8888'
-    code_permission_name = 'uuos.code'
+    global network_url
+    global python_contract
+    python_contract = 'hello'
+    main_token = 'EOS'
+    system_contract = 'eosio'
+    main_token_contract = 'eosio.token'
+    network_url = 'https://testnode.uuos.network:8443'
+    # network_url = 'http://127.0.0.1:8889'
+    code_permission_name = 'eosio.code'
 
 def setup_local_uuos_test_network():
     global main_token

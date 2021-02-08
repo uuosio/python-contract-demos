@@ -5,6 +5,7 @@ from . import config
 from . import wallet
 from .chaincache import ChainCache
 import json
+import time
 
 class ChainException(Exception):
     def __init__(self, err):
@@ -132,8 +133,8 @@ class ChainApiAsync():
         return code
 
     async def compile(self, contract, code, vm_type=1):
-        assert vm_type == 1 or vm_type == 0x11
-        if vm_type == 0x11:
+        assert vm_type == 1
+        if config.contract_deploy_type == 0:
             return self.mp_compile_to_frozen(contract, code)
         else:
             return self.mp_compile(contract, code)
@@ -285,11 +286,11 @@ class ChainApiAsync():
         # return await self.deploy_contract_python(account, code, abi, vm_type, vm_version, sign, compress)
 
     @jsobj2pyobj
-    async def deploy_python_contract(self, account, code, abi, deploy_type=1):
+    async def deploy_python_contract(self, account, code, abi, deploy_type=0):
         actions = []
 
         python_contract = None
-        if config.contract_deploy_type == 1:
+        if deploy_type == 1:
             python_contract = config.python_contract
         else:
             python_contract = account
@@ -302,7 +303,7 @@ class ChainApiAsync():
             args = {"account": account,
                     "vmtype": 1,
                     "vmversion": 0,
-                    "code": '00'
+                    "code": int.to_bytes(int(time.time()*1000), 8, 'little').hex()
             }
             try:
                 await self.push_action(config.system_contract, 'setcode', args, {account:'active'})

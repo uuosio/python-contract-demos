@@ -4,16 +4,13 @@ from uuoskit import test_helper
 
 src, abi = test_helper.load_code()
 
-if config.network == 'EOS_TESTNET':
-    test_account1 = test_helper.test_account1
-else:
-    test_account1 = 'hello'
+test_account1 = test_helper.test_account1
 
 async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
     code = uuosapi.mp_compile(test_account1, src)
 
-    r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
+    r = await uuosapi.deploy_python_contract(test_account1, code, abi)
 
     args = b'hello,world'
     try:

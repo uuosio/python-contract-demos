@@ -3,8 +3,8 @@ run = None
 from . import config
 from . import wallet
 
-test_account1 = 'hello'
-test_account2 = 'helloworld11'
+test_account1 = 'helloworld11'
+test_account2 = 'helloworld12'
 
 def init(network='EOS_TESTNET', deploy_type=1):
 #def init(network='UUOS_TESTNET', deploy_type=1):
@@ -29,9 +29,9 @@ def init(network='EOS_TESTNET', deploy_type=1):
         test_account1 = 'ceyelqpjeeia'
         test_account2 = 'ebvjmdibybgq'
     elif network == 'UUOS_TESTNET':
-        config.setup_local_uuos_test_network()
-        test_account1 = 'hello'
-        test_account2 = 'helloworld11'
+        config.setup_uuos_test_network()
+        test_account1 = 'helloworld11'
+        test_account2 = 'helloworld12'
     else:
         raise Exception(f'unknown network: {network}')
     config.contract_deploy_type = deploy_type

@@ -35,7 +35,7 @@ async def run_test():
     except chainapi.ChainException as e:
         print('+++update_code_auth error:', e.json['message'])
 
-    r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
+    r = await uuosapi.deploy_python_contract(test_account1, code, abi)
 
     args = b'hello,world'
     r = await uuosapi.push_action(config.python_contract, 'testinline', args, {test_account1: 'active'})

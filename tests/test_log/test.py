@@ -7,15 +7,7 @@ from uuoskit import test_helper
 
 src, abi = test_helper.load_code()
 
-# Replace the following default test account and test private key
-# with your own. Because someone may use the same test account at the same time,
-# that will cause conflict. If you don't have a test account,
-# go to https://testnet.eos.io and get one.
-if config.network == 'EOS_TESTNET':
-    test_account1 = 'wkpmdjdsztyu'
-    wallet.import_key('test', '5Jaz37nnxbpAiAGQEsyxtnGfCPTJFjX9Wn6zv7V41Ko6DXSqhd9')
-else:
-    test_account1 = 'helloworld11'
+test_account1 = test_helper.test_account1
 
 async def show_log(uuosapi, old_state):
     a = None

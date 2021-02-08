@@ -10123,10 +10123,15 @@ exports.timePointToDate = function (us) {
 };
 /** Convert date in ISO format to `time_point_sec` (seconds since epoch) */
 exports.dateToTimePointSec = function (date) {
+  if (date.slot) {
+    return Math.round((date.slot * 500 * 6 + 946684800000) / 1000);
+  } else {
     return Math.round(checkDateParse(date + 'Z') / 1000);
+  }
 };
 /** Convert `time_point_sec` (seconds since epoch) to to date in ISO format */
 exports.timePointSecToDate = function (sec) {
+
     var s = (new Date(sec * 1000)).toISOString();
     return s.substr(0, s.length - 1);
 };

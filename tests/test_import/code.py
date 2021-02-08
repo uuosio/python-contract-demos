@@ -1,5 +1,5 @@
-from wkpmdjdsztyu import hello
-from wkpmdjdsztyu.hello import say_hello
+from helloworld11 import hello
+from helloworld11.hello import say_hello
 
 def apply(receiver, first_receiver, action):
     hello.say_hello()

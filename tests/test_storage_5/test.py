@@ -16,7 +16,7 @@ async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
     code = uuosapi.mp_compile(test_account1, src)
 
-    r = await uuosapi.deploy_python_contract(test_account1, code, abi, deploy_type=1)
+    r = await uuosapi.deploy_python_contract(test_account1, code, abi)
 
     args = {'account':test_account1, 'group_name':'group1'}
     try:
