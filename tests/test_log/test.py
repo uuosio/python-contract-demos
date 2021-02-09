@@ -12,7 +12,7 @@ test_account1 = test_helper.test_account1
 async def show_log(uuosapi, old_state):
     a = None
     for i in range(5):
-        r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', '', '', 1)
+        r = await uuosapi.get_table_rows(False, test_account1, test_account1, 'log', '', '', 1)
         a = r['rows'][0]
         a = bytes.fromhex(a)
         if not old_state == a:
@@ -24,7 +24,7 @@ async def show_log(uuosapi, old_state):
 
     lower_bound = uuosapi.n2s(0)
     upper_bound = uuosapi.n2s(11)
-    r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', lower_bound, upper_bound, 11)
+    r = await uuosapi.get_table_rows(False, test_account1, test_account1, 'log', lower_bound, upper_bound, 11)
 
     print('+++cout:', chainapi.count)
     print('++++pos:', pos, len(r['rows']))
@@ -42,7 +42,7 @@ async def run_test():
     code = uuosapi.mp_compile(test_account1, src)
 
     try:
-        r = await uuosapi.deploy_python_code(test_account1, code, deploy_type=1)
+        r = await uuosapi.deploy_python_contract(test_account1, code, abi)
         await uuosapi.deploy_abi(config.python_contract, abi)
         print('++++deploy time:', r['processed']['elapsed'])
     except chainapi.ChainException as e:
@@ -51,7 +51,7 @@ async def run_test():
     if not hasattr(chainapi, 'count'):
         chainapi.count = 0
     chainapi.count += 1
-    r = await uuosapi.get_table_rows(False, config.python_contract, test_account1, 'log', '', '', 1)
+    r = await uuosapi.get_table_rows(False, test_account1, test_account1, 'log', '', '', 1)
     old_state = None
     if r['rows']:
         old_state = r['rows'][0]
