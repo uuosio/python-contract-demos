@@ -41,11 +41,11 @@ import struct
 import binascii
 import uio
 
-RAW_TOKEN_SYMBOL = b'\x04UUOS\x00\x00\x00'
-TOKEN_SYMBOL = int.from_bytes(b'\x04UUOS\x00\x00\x00', 'little')
+RAW_TOKEN_SYMBOL = b'\x04EOS\x00\x00\x00\x00'
+TOKEN_SYMBOL = int.from_bytes(b'\x04EOS\x00\x00\x00\x00', 'little')
 
 def create_new_account(account, pub_key, amount):
-    creator = name('hello').to_bytes()
+    creator = name('helloworld11').to_bytes()
     assert amount > 6_000, "not enough balance to create an account"
 
     packed_size = b'\x01'
@@ -64,9 +64,9 @@ def create_new_account(account, pub_key, amount):
     new_account.write(active)
     print(new_account.tell())
 
-    actor = name('hello')
+    actor = name('helloworld11')
     permission = name('active')
-    chain.send_inline(name('uuos'), name('newaccount'), actor, permission, new_account.getvalue())
+    chain.send_inline(name('eosio'), name('newaccount'), actor, permission, new_account.getvalue())
 
     # buyrambytes = creator + account + struct.pack('I', 64*1024)
     # chain.send_inline(name('uuos'), name('buyrambytes'), actor, permission, buyrambytes)
@@ -82,7 +82,7 @@ def create_new_account(account, pub_key, amount):
     buyram.write(quantity)
     buyram = buyram.getvalue()
     # buyram = b''.join((payer, receiver, quantity))
-    chain.send_inline(name('uuos'), name('buyram'), actor, permission, buyram)
+    chain.send_inline(name('eosio'), name('buyram'), actor, permission, buyram)
 
     stake_net_amount = 1_000
     stake_cpu_amount = amount - buy_ram_amount - stake_net_amount
@@ -92,18 +92,18 @@ def create_new_account(account, pub_key, amount):
     transfer = b'\x01'
 
     delegatebw = creator + account + stake_net_quantity + stake_cpu_quantity + transfer
-    chain.send_inline(name('uuos'), name('delegatebw'), actor, permission, delegatebw)
+    chain.send_inline(name('eosio'), name('delegatebw'), actor, permission, delegatebw)
 
 def apply(receiver, first_receiver, action):
-    if first_receiver == name('uuos.token'): #receive a notify from uuos.token
+    if first_receiver == name('eosio.token'): #receive a notify from uuos.token
         print(receiver, first_receiver)
         if not action == name('transfer'):
             return
         data = chain.read_action_data()
         _from, to, amount, symbol = struct.unpack('QQQQ', data[:32])
-        if _from == int(name('hello')):
+        if _from == int(name('helloworld11')):
             return
-        assert name(to) == name('hello')
+        assert name(to) == name('helloworld11')
         assert symbol == TOKEN_SYMBOL, 'bad token'
         assert amount >= 1_0000
         memo = data[33:]

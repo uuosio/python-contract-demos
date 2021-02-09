@@ -120,16 +120,18 @@ async def init_editor():
         storage['selected_file'] = 'test_helloworld'
         load_test_sync('test_helloworld')
 
-    network = 'Eos_Testnet'
-    if 'network' in storage:
-        network = storage['network']
-    if network == 'Eos_Testnet':
-        doc['networks'].selectedIndex = 0
-    elif network == 'UUOS_Testnet':
-        doc['networks'].selectedIndex = 1
-    else:
-        doc['networks'].selectedIndex = 0
+    # network = 'UUOS_Testnet'
+    # if 'network' in storage:
+    #     network = storage['network']
+    # if network == 'Eos_Testnet':
+    #     doc['networks'].selectedIndex = 0
+    # elif network == 'UUOS_Testnet':
+    #     doc['networks'].selectedIndex = 1
+    # else:
+    #     doc['networks'].selectedIndex = 0
 
+    network = 'UUOS_Testnet'
+    doc['networks'].selectedIndex = 0
     switch_network(network)
 
 def load_code(evt):

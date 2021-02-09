@@ -9,13 +9,12 @@ test_account2 = test_helper.test_account2
 
 async def run_test():
     uuosapi = chainapi.ChainApiAsync(config.network_url)
-    code = uuosapi.mp_compile(config.python_contract, src)
+    code = uuosapi.mp_compile(test_account1, src)
 
-    if config.contract_deploy_type == 1:
-        await uuosapi.deploy_abi(config.python_contract, abi)
+    await uuosapi.deploy_abi(test_account1, abi)
 
     try:
-        r = await uuosapi.deploy_python_contract(config.python_contract, code, abi, deploy_type=1)
+        r = await uuosapi.deploy_python_contract(test_account1, code, abi)
     except chainapi.ChainException as e:
         print('+++deploy error:', e.json['message'])
 
@@ -24,9 +23,10 @@ async def run_test():
         'maximum_supply':'1000.0000 TTT'
     }
     try:
-        r = await uuosapi.push_action(config.python_contract, 'create', args, {test_account1: 'active'})
+        r = await uuosapi.push_action(test_account1, 'create', args, {test_account1: 'active'})
         test_helper.print_console(r)
     except chainapi.ChainException as e:
+        print(e)
         msg = e.json['error']['details'][0]['message']
         print('+++create:', msg)
 
@@ -36,27 +36,27 @@ async def run_test():
         'memo': f'issue 10 TTT to {test_account1}'
     }
 
-    balance1 = await uuosapi.get_balance(config.python_contract, token_account=config.python_contract, token_name='TTT')
+    balance1 = await uuosapi.get_balance(test_account1, token_account=test_account1, token_name='TTT')
     try:
-        r = await uuosapi.push_action(config.python_contract, 'issue', args, {test_account1: 'active'})
+        r = await uuosapi.push_action(test_account1, 'issue', args, {test_account1: 'active'})
         test_helper.print_console(r)
     except chainapi.ChainException as e:
         print('+++issue error:', e)
-    balance2 = await uuosapi.get_balance(config.python_contract, token_account=config.python_contract, token_name='TTT')
+    balance2 = await uuosapi.get_balance(test_account1, token_account=test_account1, token_name='TTT')
     print(balance1, balance2)
 
     args = {
-        'from': config.python_contract,
+        'from': test_account1,
         'to': test_account2,
         'quantity': '10.0000 TTT',
         'memo': f'transfer 10 TTT to {test_account2}'
     }
-    print('++++++++++:', config.python_contract, test_account2)
+    print('++++++++++:', test_account1, test_account2)
 
-    balance1 = await uuosapi.get_balance(config.python_contract, token_account=config.python_contract, token_name='TTT')
-    r = await uuosapi.push_action(config.python_contract, 'transfer', args, {config.python_contract: 'active'})
+    balance1 = await uuosapi.get_balance(test_account1, token_account=test_account1, token_name='TTT')
+    r = await uuosapi.push_action(test_account1, 'transfer', args, {test_account1: 'active'})
     test_helper.print_console(r)
     print('+++transfer:', r['processed']['elapsed'])
 
-    balance2 = await uuosapi.get_balance(test_account2, token_account=config.python_contract, token_name='TTT')
+    balance2 = await uuosapi.get_balance(test_account2, token_account=test_account1, token_name='TTT')
     print(balance1, balance2)

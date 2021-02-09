@@ -29,10 +29,9 @@ src, abi = test_helper.load_code()
 test_account1 = test_helper.test_account1
 test_account2 = test_helper.test_account2
 
+wallet.import_key('test', '5JHRxntHapUryUetZgWdd3cg6BrpZLMJdqhhXnMaZiiT4qdJPhv')
+
 async def run_test():
-    if config.network == 'EOS_TESTNET':
-        print('This example not work on EOS Testnet')
-        return
     uuosapi = chainapi.ChainApiAsync(config.network_url)
     code = uuosapi.mp_compile(test_account1, src)
     await update_code_auth(uuosapi)
@@ -41,6 +40,9 @@ async def run_test():
     r = await uuosapi.deploy_python_contract(test_account1, code, abi)
     
     memo = 'helloworld51-0003ff99995d1ec79e7662bc7ffa076aeceda00fb9540406091ad36bf8f2ec58d651'
+    balance1 = await uuosapi.get_balance(test_account2)
     r = await uuosapi.transfer(test_account2, test_account1, 1.0, memo)
+    balance2 = await uuosapi.get_balance(test_account2)
+    print(balance1, balance2)
     console = r['processed']['action_traces'][0]['inline_traces'][1]['console']
-    print(console)
+    print('+++console:', console)
