@@ -289,6 +289,10 @@ class ChainApiAsync():
     async def deploy_python_contract(self, account, code, abi, deploy_type=0):
         actions = []
 
+        if isinstance(abi, str):
+            abi = json.loads(abi)
+        self.api.setCachedAbi(account, abi)
+
         python_contract = None
         if deploy_type == 1:
             python_contract = config.python_contract
@@ -305,14 +309,19 @@ class ChainApiAsync():
                     "vmversion": 0,
                     "code": int.to_bytes(int(time.time()*1000), 8, 'little').hex()
             }
-            try:
-                await self.push_action(config.system_contract, 'setcode', args, {account:'active'})
-            except:
-                pass
 
-#        actions.append(setcode)
+            setcode = {
+                'account': config.system_contract,
+                'name': 'setcode',
+                'authorization': [{
+                    'actor': account,
+                    'permission': 'active',
+                }],
+                'data': args,
+            }
+            actions.append(setcode)
 
-        print('+++deploy_contract_python:', python_contract)
+        print('+++deploy_python_contract:', python_contract)
 
         args = self.s2b(account) + code
         args = bytes(args)
@@ -341,19 +350,31 @@ class ChainApiAsync():
             abi = self.api.array2hex(abi)
         elif isinstance(abi, bytes):
             abi = abi.hex()
-
-        args = self.s2b(account).hex()
-        args += abi
-        args = '0x' + args
-        setabi = {
-            'account': python_contract,
-            'name': 'setabi',
-            'authorization': [{
-                'actor': account,
-                'permission': 'active',
-            }],
-            'data': args,
-        }
+        
+        if deploy_type == 0:
+            args = {'account':account, 'abi':abi}
+            setabi = {
+                'account': config.system_contract,
+                'name': 'setabi',
+                'authorization': [{
+                    'actor': account,
+                    'permission': 'active',
+                }],
+                'data': args,
+            }
+        else:
+            args = self.s2b(account).hex()
+            args += abi
+            args = '0x' + args
+            setabi = {
+                'account': python_contract,
+                'name': 'setabi',
+                'authorization': [{
+                    'actor': account,
+                    'permission': 'active',
+                }],
+                'data': args,
+            }
 
         actions.append(setabi)
 
@@ -449,7 +470,7 @@ class ChainApiAsync():
 
 #        actions.append(setcode)
 
-        print('+++deploy_contract_python:', python_contract)
+        print('+++deploy_python_code:', python_contract)
 
         args = self.s2b(account) + code
         args = bytes(args)
@@ -511,7 +532,7 @@ class ChainApiAsync():
             'expireSeconds': 60,
         })
 
-        if not 'error' in ret:
+        if not 'error' in ret and origin_abi:
             self.api.setCachedAbi(account, origin_abi)
 
         return ret
