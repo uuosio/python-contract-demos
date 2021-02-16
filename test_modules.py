@@ -22,6 +22,7 @@ modules = [
         ("test_storage_2", "persistent storage 2"),
         ("test_storage_3", "persistent storage 3"),
         ("test_storage_4", "persistent storage 4"),
+        ("test_storage_kv", "kv table example"),
         ("test_multi_index_1", "multi-index 1"),
         ("test_multi_index_2", "multi-index 2"),
         ("test_multi_index_3", "multi-index 3"),
