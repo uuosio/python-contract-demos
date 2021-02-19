@@ -51,14 +51,12 @@ wasm_code = b'\x00asm\x01\x00\x00\x00\x01)\x08`\x02\x7f\x7f\x01\x7f`\x01\x7f\x00
 src, abi = test_helper.load_code()
 
 test_account1 = test_helper.test_account1
+test_account2 = test_helper.test_account2
 
 async def run_test():
-    if config.system_contract == 'eosio':
-        print('This example only works on uuos network')
-        return
     uuosapi = chainapi.ChainApiAsync(config.network_url)
     code = uuosapi.mp_compile(test_account1, src)
-
+    print(test_account1, test_account2)
     try:
         r = await uuosapi.deploy_contract(test_account2, wasm_code, wasm_abi, vm_type=0)
     except chainapi.ChainException as e:
@@ -72,9 +70,3 @@ async def run_test():
         test_helper.print_console(r)
     except chainapi.ChainException as e:
         print('+++test error:', e)
-
-
-
-
-
-
