@@ -10,7 +10,7 @@ async def update_code_auth(uuosapi):
             "threshold": 1,
             "keys": [
                 {
-                    "key": "EOS8moVJwVaR8pb43KBi2HwmtbwebXmjSJUerfwbvFW41tEvYsfDE",
+                    "key": "EOS7sPDxfw5yx5SZgQcVb57zS1XeSWLNpQKhaGjjy2qe61BrAQ49o",
                     "weight": 1
                 },
             ],

@@ -105,9 +105,57 @@ def option_load_test(evt):
     storage['selected_file'] = evt.target.value
     load_test_sync(evt.target.value)
 
+
+all_demos = (
+    "test_helloworld",
+    "test_name",
+    "test_float128",
+    "test_bytesio",
+    "test_math",
+    "test_import",
+    "test_assert",
+    "test_authorization",
+    "test_inline_action",
+    "test_require_recipient",
+    "test_block_info",
+    "test_hash",
+    "test_recover_key",
+    "test_storage_1",
+    "test_storage_2",
+    "test_storage_3",
+    "test_storage_4",
+    "test_kv",
+    "test_multi_index_1",
+    "test_multi_index_2",
+    "test_multi_index_3",
+    "test_call_wasm_contract",
+    "test_token",
+    "test_storage_5",
+    "test_create_account",
+    "test_log"
+)
+
 async def init_editor():
+    global all_demos
     option = doc['files'].options[0]
-    
+
+    network = 'UUOS_Testnet'
+    doc['networks'].selectedIndex = 0
+    switch_network(network)
+
+    url = window.URL.new(window.location.href)
+    demo = url.searchParams.get('demo')
+    if demo:
+        try:
+            index = all_demos.index(demo)
+            doc['files'].selectedIndex = index
+            storage['selected_file_index'] = str(index)
+            storage['selected_file'] = all_demos[index]
+            load_test_sync(all_demos[index])
+            return
+        except ValueError as e:
+            pass
+
     if 'selected_file_index' in storage:
         doc['files'].selectedIndex = int(storage['selected_file_index'])
     else:
@@ -129,10 +177,6 @@ async def init_editor():
     #     doc['networks'].selectedIndex = 1
     # else:
     #     doc['networks'].selectedIndex = 0
-
-    network = 'UUOS_Testnet'
-    doc['networks'].selectedIndex = 0
-    switch_network(network)
 
 def load_code(evt):
     if evt.target.id == 'btn_code':

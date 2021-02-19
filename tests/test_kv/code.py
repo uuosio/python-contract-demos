@@ -1,17 +1,17 @@
 import chain
 def apply(a, b, c):
-    r = chain.kv_set('helloworld11', 'hello', 'world', 'helloworld11')
+    r = chain.kv_set('helloworld11', b'hello', b'world', 'helloworld11')
     print(r)
-    r = chain.kv_set('helloworld11', 'helloo', 'worldd', 'helloworld11')
+    r = chain.kv_set('helloworld11', b'helloo', b'worldd', 'helloworld11')
     print(r)
-    r = chain.kv_get('helloworld11', 'hello')
+    r = chain.kv_get('helloworld11', b'hello')
     print(r)
     r = chain.kv_get_data(0)
     print('+++kv_get_data:', r)
 
-    itr = chain.kv_it_create('helloworld11', 'hello')
+    itr = chain.kv_it_create('helloworld11', b'hello')
     print(itr)
-    ret = chain.kv_it_lower_bound(itr, 'hello')
+    ret = chain.kv_it_lower_bound(itr, b'hello')
     print('kv_it_lower_bound:', ret)
 
     ret = chain.kv_it_key(itr, 0, 0)

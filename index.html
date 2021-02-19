@@ -241,6 +241,34 @@ trans = {
 </style>
 
 <script>
+var all_demos = [
+    "test_helloworld",
+    "test_name",
+    "test_float128",
+    "test_bytesio",
+    "test_math",
+    "test_import",
+    "test_assert",
+    "test_authorization",
+    "test_inline_action",
+    "test_require_recipient",
+    "test_block_info",
+    "test_hash",
+    "test_recover_key",
+    "test_storage_1",
+    "test_storage_2",
+    "test_storage_3",
+    "test_storage_4",
+    "test_kv",
+    "test_multi_index_1",
+    "test_multi_index_2",
+    "test_multi_index_3",
+    "test_call_wasm_contract",
+    "test_token",
+    "test_storage_5",
+    "test_create_account",
+    "test_log"
+  ];
 
   var editor = ace.edit("editor_abi");
   editor.getSession().setUseWorker(false);
@@ -278,13 +306,27 @@ trans = {
   tablinks[0].className += " active";
   document.getElementById('code').style.display = "block";
   document.getElementById('id_tabs').style.display = "block";
-  
-  var index = localStorage.getItem('selected_file_index');
-  if (index) {
-    var select = document.getElementById('files');
-    select.selectedIndex = index;
-    // select.text = select.options[index].text;
+
+  const url = new URL(window.location.href);
+
+  var index = -1;
+  var demo = url.searchParams.get('demo');
+  if (demo) {
+    index = all_demos.indexOf(demo);
+  } else {
+    index = localStorage.getItem('selected_file_index');
+    if (!index) {
+      index = -1;
+    }
   }
+
+  if (index == -1) {
+    index = 0;
+  }
+  var select = document.getElementById('files');
+  select.selectedIndex = index;
+  // select.text = select.options[index].text;
+
 </script>
 
 <div id="legend">
