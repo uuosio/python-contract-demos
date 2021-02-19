@@ -15,12 +15,11 @@ class Counter(object):
         self.storage = db.ChainDBKey64(code, scope, name('table3'), type(self))
         self.primary_key = chain.s2n('counter')
         self.payer = payer
-        self.count = self.load()
-        if self.count is None:
-            self.count = 0
 
     def load(self):
-        return self.storage.load(self.primary_key)
+        self.count = self.storage.load(self.primary_key)
+        if self.count is None:
+            self.count = 0
 
     def store(self):
         self.storage.store(self)
@@ -40,6 +39,7 @@ class Counter(object):
 
 counter = Counter()
 def apply(receiver, first_receiver, action):
+    counter.load()
     counter.count += 1
     counter.store()
-    print('counter is:', counter)
+    print('+++counter is:', counter)
